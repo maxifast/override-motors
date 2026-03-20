@@ -5,13 +5,21 @@ export const dynamic = 'force-dynamic';
 
 async function getCars() {
   try {
-    const cars = await prisma.car.findMany({
+    const rawCars = await prisma.car.findMany({
       orderBy: [
         { is_pinned: 'desc' },
         { created_at: 'desc' }
-      ]
+      ],
+      take: 50
     });
-    return cars;
+    
+    const pinned = rawCars.filter(c => c.is_pinned);
+    const unpinned = rawCars.filter(c => !c.is_pinned);
+    
+    const newestUnpinned = unpinned.slice(0, 4);
+    const rest = unpinned.slice(4).sort(() => Math.random() - 0.5).slice(0, 12);
+    
+    return [...pinned, ...newestUnpinned, ...rest];
   } catch (e) {
     console.error("Database fetching error", e);
     return [];

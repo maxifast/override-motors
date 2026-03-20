@@ -1,89 +1,144 @@
-import Header from '../../components/Header';
+import { prisma } from "../../../lib/prisma";
+import Link from 'next/link';
 
-async function getCar(id: string) {
-  // Simulating fetch from Express Backend
-  return {
-    id,
-    title: 'Porsche 911 GT3 RS',
-    price: 185000,
-    year: 2023,
-    mileage: 4500,
-    fuel_type: 'Petrol',
-    damage_description_en: 'Heavy front collision damage. Airbags deployed. Engine intact but radiators crushed. Structural integrity compromised at front right chassis rail.',
-    original_url: 'https://schadeautos.nl/',
-    images: [] // Placeholder
-  };
-}
+export const dynamic = 'force-dynamic';
 
-export default async function CarProductPage({ params }: { params: { id: string } }) {
-  const car = await getCar(params.id);
+export default async function CarDetail({ params }: { params: { id: string } }) {
+  const carId = parseInt(params.id);
+  if (isNaN(carId)) {
+    return <div className="text-white text-center p-20">INVALID SIGNAL DETECTED</div>;
+  }
+
+  const car = await prisma.car.findUnique({
+    where: { id: carId }
+  });
+
+  if (!car) {
+    return <div className="text-white text-center p-20 font-mono tracking-widest text-red-500 text-xl shadow-[0_0_10px_red]">404 - ASSET NOT FOUND IN DATABANKS</div>;
+  }
 
   return (
-    <main className="min-h-screen bg-black text-white font-sans">
-      <Header />
+    <main className="min-h-screen bg-black text-white font-sans relative" style={{ backgroundImage: 'radial-gradient(circle at 15% 50%, rgba(0, 255, 255, 0.05), transparent 25%), radial-gradient(circle at 85% 30%, rgba(255, 0, 127, 0.05), transparent 25%)' }}>
       
-      <div className="max-w-6xl mx-auto p-4 sm:p-8 mt-6">
-        <div className="border border-cyan-500/50 rounded-xl bg-gray-900/80 shadow-[0_0_30px_rgba(0,255,255,0.1)] overflow-hidden">
-          <div className="p-8 border-b border-gray-800 flex justify-between items-end">
-            <div>
-              <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">{car.title}</h1>
-              <p className="text-gray-400 font-mono tracking-widest">VIN: WPOZZZ***</p>
+      {/* HEADER PORTED FROM HOMEPAGE */}
+      <header className="px-6 py-4 flex justify-between items-center border-b border-cyan-500/30 bg-black/50 backdrop-blur sticky top-0 z-50">
+        <div className="flex flex-col">
+            <h1 className="text-2xl md:text-3xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600 drop-shadow-[0_0_5px_rgba(0,255,255,0.8)]">
+                OVERRIDE MOTORS
+            </h1>
+        </div>
+        
+        <div className="flex items-center gap-4">
+            <div className="hidden sm:flex items-center gap-2 border border-red-500/50 bg-red-900/20 px-3 py-1 rounded text-red-500 text-xs font-bold tracking-widest uppercase">
+                <span className="animate-ping w-2 h-2 bg-red-500 rounded-full inline-block"></span>
+                ACCESS LEVEL: PREMIUM
             </div>
-            <p className="text-orange-500 text-3xl font-bold shadow-orange w-max">€ {car.price.toLocaleString()}</p>
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
-            <div className="lg:col-span-3 bg-gray-950 flex flex-col">
-               <div className="h-96 w-full relative">
-                 {car.images?.length > 0 ? (
-                    <img src={car.images[0]} alt={car.title} className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-gray-700 border-r border-gray-800">
-                        <span className="text-4xl mb-2">⌕</span>
-                        <span className="tracking-widest uppercase">Visual Data Missing</span>
+            <Link href="/" className="px-4 py-2 bg-cyan-900/40 hover:bg-cyan-600/60 border border-cyan-500 text-cyan-300 font-bold uppercase tracking-widest text-xs transition duration-300 shadow-[0_0_10px_rgba(0,255,255,0.2)]">
+                &lt; BACK TO FEED
+            </Link>
+        </div>
+      </header>
+
+      <div className="max-w-[1200px] mx-auto p-4 md:p-8 mt-4 grid grid-cols-1 lg:grid-cols-2 gap-10">
+        
+        {/* LEFT COLLUMN - VISUALS */}
+        <div className="space-y-4">
+            <div className="border border-cyan-500/40 p-1 bg-gray-900 relative shadow-[0_0_20px_rgba(0,255,255,0.1)] group overflow-hidden">
+                {/* Holographic scanner line overlay */}
+                <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-400 opacity-60 shadow-[0_0_8px_#0ff] z-10 hidden group-hover:block translate-y-full hover:animate-[scan_2s_linear_infinite]"></div>
+                
+                {car.images && car.images.length > 0 ? (
+                    <img src={car.images[0]} className="w-full h-auto object-cover opacity-90 transition duration-500" alt={car.title} />
+                ) : (
+                    <div className="w-full h-80 flex items-center justify-center border border-dashed border-gray-700 text-gray-500">IMAGE STREAM OFFLINE</div>
+                )}
+            </div>
+
+            <div className="grid grid-cols-3 gap-2">
+                {car.images && car.images.slice(1).map((img, idx) => (
+                    <div key={idx} className="border border-gray-800 hover:border-pink-500 transition-colors cursor-pointer opacity-70 hover:opacity-100 overflow-hidden">
+                        <img src={img} className="w-full h-24 object-cover" alt="Detail view" />
                     </div>
-                  )}
-               </div>
+                ))}
+            </div>
+        </div>
+
+        {/* RIGHT COLUMN - DATA & SPECS */}
+        <div className="flex flex-col gap-6">
+            <div className="border-b border-gray-800 pb-6 relative">
+                <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-purple-600"></div>
+                <h1 className="text-3xl md:text-5xl font-black text-white leading-tight drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">{car.title}</h1>
+                <div className="flex flex-wrap gap-3 mt-4">
+                    <span className="px-3 py-1 bg-cyan-900/30 border border-cyan-800 text-cyan-400 font-mono text-sm uppercase">YEAR: {car.year}</span>
+                    <span className="px-3 py-1 bg-purple-900/30 border border-purple-800 text-purple-400 font-mono text-sm uppercase">MILEAGE: {car.mileage.toLocaleString()} KM</span>
+                    <span className="px-3 py-1 bg-orange-900/30 border border-orange-800 text-orange-400 font-mono text-sm uppercase">FUEL: {car.fuel_type}</span>
+                </div>
+            </div>
+
+            <div className="flex gap-4 items-end">
+                <div className="flex flex-col">
+                    <span className="text-gray-500 font-mono text-xs mb-1">ASSET ACQUISITION VALUE</span>
+                    <span className="text-4xl md:text-5xl font-bold text-orange-500 drop-shadow-[0_0_15px_rgba(255,165,0,0.4)]">
+                        € {car.price.toLocaleString()}
+                    </span>
+                </div>
+                <div className="ml-auto">
+                    <button className="px-8 py-4 bg-pink-600 hover:bg-pink-500 text-white font-black uppercase tracking-widest text-lg transition shadow-[0_0_20px_rgba(255,0,127,0.5)] border border-pink-400 hover:scale-105 transform">
+                        INITIATE TRANSFER
+                    </button>
+                </div>
+            </div>
+
+            {/* NEON PANELS */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div className="bg-gray-900/50 border border-red-900 p-4 relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-8 h-8 bg-red-500/10 border-l border-b border-red-500/30 flex items-center justify-center group-hover:bg-red-500/30 transition-colors">
+                        <span className="text-red-500 text-[10px] font-mono">⚠</span>
+                    </div>
+                    <h3 className="text-red-500 font-bold uppercase tracking-widest text-xs mb-3 flex items-center gap-2">
+                        <div className="w-1 h-3 bg-red-500"></div>
+                        Damage Profile
+                    </h3>
+                    <p className="text-gray-300 font-mono text-sm leading-relaxed">
+                        {car.damage_description_en || "System indicates unspecified structural anomalies. Full physical inspection recommended."}
+                    </p>
+                </div>
+
+                <div className="bg-gray-900/50 border border-cyan-900 p-4 relative overflow-hidden group">
+                    <h3 className="text-cyan-400 font-bold uppercase tracking-widest text-xs mb-3 flex items-center gap-2">
+                        <div className="w-1 h-3 bg-cyan-400"></div>
+                        Market Analysis
+                    </h3>
+                    <div className="space-y-3">
+                        <div>
+                            <div className="flex justify-between text-xs font-mono text-gray-400 mb-1"><span>Repair Est.</span> <span>€{(car.price * 0.45).toLocaleString(undefined, {maximumFractionDigits:0})}</span></div>
+                            <div className="w-full h-1 bg-gray-800"><div className="h-full bg-cyan-600 w-[45%]"></div></div>
+                        </div>
+                        <div>
+                            <div className="flex justify-between text-xs font-mono text-gray-400 mb-1"><span>Profit Margin</span> <span>HIGH</span></div>
+                            <div className="w-full h-1 bg-gray-800"><div className="h-full bg-green-500 w-[82%] shadow-[0_0_5px_#0f0]"></div></div>
+                        </div>
+                    </div>
+                </div>
             </div>
             
-            <div className="lg:col-span-2 p-8 flex flex-col gap-8 bg-gray-900/40">
-              <div className="space-y-4">
-                <h3 className="text-pink-500 font-bold text-sm flex items-center gap-2 uppercase tracking-widest">
-                  <span className="w-2 h-2 bg-pink-500 rounded-full animate-ping"></span> 
-                  Vehicle Specs
-                </h3>
-                <ul className="space-y-4 text-gray-300 font-mono text-sm">
-                  <li className="flex justify-between border-b border-gray-800 pb-2">
-                    <span className="text-gray-500">YEAR</span> <span className="text-cyan-400 font-bold">{car.year}</span>
-                  </li>
-                  <li className="flex justify-between border-b border-gray-800 pb-2">
-                    <span className="text-gray-500">MILEAGE</span> <span className="text-cyan-400 font-bold">{car.mileage.toLocaleString()} km</span>
-                  </li>
-                  <li className="flex justify-between border-b border-gray-800 pb-2">
-                    <span className="text-gray-500">POWERTRAIN</span> <span className="text-cyan-400 font-bold">{car.fuel_type}</span>
-                  </li>
-                </ul>
-              </div>
-              
-              <div className="space-y-4">
-                 <h3 className="text-pink-500 font-bold text-sm uppercase tracking-widest">Damage Profile Report</h3>
-                 <p className="text-gray-400 leading-relaxed text-sm bg-black/40 p-4 rounded border border-gray-800 font-mono">
-                  {car.damage_description_en}
-                 </p>
-              </div>
-              
-              <a 
-                href={car.original_url} 
-                target="_blank" 
-                rel="noreferrer"
-                className="mt-auto block w-full text-center bg-cyan-600 hover:bg-cyan-500 text-black font-bold py-4 rounded transition uppercase tracking-widest shadow-[0_0_15px_rgba(0,255,255,0.3)]"
-              >
-                Acquire Asset
-              </a>
+            <div className="mt-8 border-t border-gray-800 pt-6">
+                <p className="text-xs text-gray-600 font-mono">
+                    ORIGIN DATALINK: <a href={car.original_url} target="_blank" className="text-cyan-700 hover:text-cyan-400 hover:underline break-all">{car.original_url}</a>
+                </p>
             </div>
-          </div>
         </div>
       </div>
+      
+      {/* Required for the scanning animation */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes scan {
+          0% { top: 0%; opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { top: 100%; opacity: 0; }
+        }
+      `}} />
     </main>
   );
 }
