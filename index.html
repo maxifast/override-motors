@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Override Motors - Cyberpunk UI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="cyber-background">
+        <div class="grid-overlay"></div>
+        <div class="noise-overlay"></div>
+    </div>
+
+    <main class="dashboard">
+        <!-- HEADER BLOCK -->
+        <header class="top-header">
+            <div class="warning-triangle">
+                <svg viewBox="0 0 100 100" class="neon-svg-orange">
+                    <polygon points="50,10 90,90 10,90" fill="none" stroke="currentColor" stroke-width="4"/>
+                    <text x="50" y="70" text-anchor="middle" fill="currentColor" font-size="40" font-family="'Orbitron', sans-serif">!</text>
+                </svg>
+                <span class="warning-text neon-text-orange">ACCESS LEVEL: PREMIUM</span>
+            </div>
+            
+            <div class="title-container">
+                <h1 class="main-title glitch" data-text="OVERRIDE MOTORS">OVERRIDE MOTORS</h1>
+                <div class="status-badge neon-badge-blue">
+                    <span class="blinking-dot"></span> PREMIUM EU SALVAGE ASSETS
+                </div>
+            </div>
+            
+            <div class="deco-line"></div>
+        </header>
+
+        <!-- SEARCH AND FILTERS -->
+        <section class="search-filter-section">
+            <div class="search-bar">
+                <span class="search-icon neon-text-blue">⌕</span>
+                <input type="text" class="neon-input" placeholder="SEARCH BRAND: PORSCHE, AUDI, BMW...">
+            </div>
+            
+            <div class="dropdown-filters">
+                <div class="cyber-dropdown neon-border-pink" id="brand-dropdown">
+                    <div class="dropdown-header">
+                        <span class="selected-value">BRAND: ALL</span>
+                        <span class="dropdown-arrow neon-text-pink">▼</span>
+                    </div>
+                    <ul class="dropdown-list border-pink">
+                        <li class="dropdown-item">Rolls-Royce</li>
+                        <li class="dropdown-item">Bentley</li>
+                        <li class="dropdown-item">Ferrari</li>
+                        <li class="dropdown-item">Lamborghini</li>
+                        <li class="dropdown-item">Aston Martin</li>
+                        <li class="dropdown-item">Porsche</li>
+                        <li class="dropdown-item">McLaren</li>
+                        <li class="dropdown-item">Bugatti</li>
+                        <li class="dropdown-item">Pagani</li>
+                        <li class="dropdown-item">Koenigsegg</li>
+                        <li class="dropdown-item">Maserati</li>
+                        <li class="dropdown-item">Mercedes-Maybach</li>
+                        <li class="dropdown-item">Jaguar</li>
+                        <li class="dropdown-item">Lexus</li>
+                        <li class="dropdown-item">Land Rover</li>
+                        <li class="dropdown-item">Alfa Romeo</li>
+                        <li class="dropdown-item">Lotus</li>
+                        <li class="dropdown-item">Genesis</li>
+                        <li class="dropdown-item">Acura</li>
+                        <li class="dropdown-item">Cadillac</li>
+                        <li class="dropdown-item">Toyota</li>
+                        <li class="dropdown-item">Honda</li>
+                    </ul>
+                </div>
+
+                <div class="cyber-dropdown neon-border-purple" id="damage-dropdown">
+                    <div class="dropdown-header">
+                        <span class="selected-value">DAMAGE: ALL</span>
+                        <span class="dropdown-arrow neon-text-purple">▼</span>
+                    </div>
+                    <ul class="dropdown-list border-purple">
+                        <li class="dropdown-item">Collision (Столкновение)</li>
+                        <li class="dropdown-item">Water/Flood (Утопленник)</li>
+                        <li class="dropdown-item">Fire (Пожар)</li>
+                        <li class="dropdown-item">Hail (Град)</li>
+                        <li class="dropdown-item">Vandalism (Вандализм)</li>
+                        <li class="dropdown-item">Mechanical (Механические)</li>
+                        <li class="dropdown-item">Rollover (Переворот)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- DASHBOARD GAUGES -->
+        <section class="gauges-section">
+            <div class="vertical-scale">
+                <div class="scale-bar"></div>
+                <div class="scale-bar"></div>
+                <div class="scale-bar"></div>
+                <div class="scale-bar"></div>
+                <div class="scale-bar"></div>
+                <div class="scale-bar"></div>
+                <div class="scale-bar"></div>
+            </div>
+            
+            <div class="gauges-container">
+                <!-- Gauge 1 -->
+                <div class="gauge-wrapper">
+                    <svg class="gauge-svg" viewBox="0 0 100 100">
+                        <circle class="gauge-bg" cx="50" cy="50" r="45"></circle>
+                        <circle class="gauge-fill neon-stroke-blue" cx="50" cy="50" r="45" stroke-dasharray="283" stroke-dashoffset="283" data-target="22.6"></circle>
+                    </svg>
+                    <div class="gauge-content">
+                        <span class="gauge-value neon-text-blue" data-value="92" data-suffix="%">0%</span>
+                        <span class="gauge-label">DAMAGE<br>ASSESSMENT</span>
+                    </div>
+                </div>
+
+                <!-- Gauge 2 -->
+                <div class="gauge-wrapper gauge-center">
+                    <svg class="gauge-svg" viewBox="0 0 100 100">
+                        <circle class="gauge-bg" cx="50" cy="50" r="45"></circle>
+                        <circle class="gauge-fill neon-stroke-purple" cx="50" cy="50" r="45" stroke-dasharray="283" stroke-dashoffset="283" data-target="113.2"></circle>
+                    </svg>
+                    <div class="gauge-content">
+                        <span class="gauge-value neon-text-purple" data-value="18" data-prefix="€" data-suffix="k">€0k</span>
+                        <span class="gauge-label">REPAIR<br>EST.</span>
+                    </div>
+                </div>
+
+                <!-- Gauge 3 -->
+                <div class="gauge-wrapper">
+                    <svg class="gauge-svg" viewBox="0 0 100 100">
+                        <circle class="gauge-bg" cx="50" cy="50" r="45"></circle>
+                        <circle class="gauge-fill neon-stroke-blue" cx="50" cy="50" r="45" stroke-dasharray="283" stroke-dashoffset="283" data-target="5.6"></circle>
+                    </svg>
+                    <div class="gauge-content">
+                        <span class="gauge-value neon-text-blue" data-value="98" data-suffix="/100">0/100</span>
+                        <span class="gauge-label">MARKET<br>INDEX</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MAIN INVENTORY AREA -->
+        <section class="inventory-grid" id="inventory-grid">
+            <!-- Cards will be injected by JS -->
+        </section>
+
+        <div class="load-more-container">
+            <button class="neon-btn btn-blue" id="load-more-btn">LOAD MORE VEHICLES ⟳</button>
+        </div>
+        
+        <div class="sys-footer">
+            <span class="running-text" id="sys-log">RETRIEVING VIN DATA... </span>
+        </div>
+        
+        <footer class="cyber-footer">
+            <div class="footer-content">
+                <span class="neon-text-pink">OVERRIDE MOTORS</span> © 2026 // SECURE CONNECTION
+            </div>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

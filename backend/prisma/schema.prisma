@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Brand {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  cars      Car[]
+}
+
+model DamageType {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  cars      Car[]
+}
+
+model Car {
+  id                     Int          @id @default(autoincrement())
+  original_url           String       @unique
+  title                  String
+  year                   Int          // Must be >= 2020
+  mileage                Int          // Must be <= 200000
+  fuel_type              String       // Added for UI display
+  price                  Float
+  damage_description_en  String       @db.Text
+  images                 String[]     // Array of image URLs
+  source                 String       // E.g., 'scraped_schadeautos', 'manual'
+  is_pinned              Boolean      @default(false)
+  status                 CarStatus    @default(pending_publish)
+  
+  brand_id               Int
+  brand                  Brand        @relation(fields: [brand_id], references: [id])
+  damage_type_id         Int
+  damage_type            DamageType   @relation(fields: [damage_type_id], references: [id])
+
+  created_at             DateTime     @default(now())
+  updated_at             DateTime     @updatedAt
+}
+
+enum CarStatus {
+  active
+  sold
+  pending_publish
+}
