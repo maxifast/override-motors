@@ -3,9 +3,24 @@ import prisma from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 
-async function getCars() {
+async function getCars(searchParams: { make?: string, damage?: string, fuel?: string, q?: string }) {
   try {
+    const where: any = {};
+    if (searchParams.make && searchParams.make !== 'All Makes') {
+      where.brand = { name: searchParams.make };
+    }
+    if (searchParams.damage && searchParams.damage !== 'All Damage Types') {
+      where.damage_type = { name: searchParams.damage };
+    }
+    if (searchParams.fuel && searchParams.fuel !== 'All Fuel Types') {
+      where.fuel_type = searchParams.fuel;
+    }
+    if (searchParams.q) {
+      where.title = { contains: searchParams.q, mode: 'insensitive' };
+    }
+
     const rawCars = await prisma.car.findMany({
+      where,
       orderBy: [
         { is_pinned: 'desc' },
         { created_at: 'desc' }
@@ -26,8 +41,14 @@ async function getCars() {
   }
 }
 
-export default async function Home() {
-  const cars = await getCars();
+export default async function Home(props: { searchParams: Promise<{ [key: string]: string | undefined }> }) {
+  const searchParams = await props.searchParams;
+  const cars = await getCars({
+    make: searchParams.make,
+    damage: searchParams.damage,
+    fuel: searchParams.fuel,
+    q: searchParams.q
+  });
 
   return (
     <main className="min-h-screen bg-black text-white font-sans relative" style={{ backgroundImage: 'radial-gradient(circle at 15% 50%, rgba(0, 255, 255, 0.05), transparent 25%), radial-gradient(circle at 85% 30%, rgba(255, 0, 127, 0.05), transparent 25%)' }}>
