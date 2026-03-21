@@ -4,13 +4,20 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const CyberGauge = ({ value, label, color, unit, prefix = '' }: any) => {
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setDisplayValue(parseInt(value)), 100);
+    return () => clearTimeout(timeout);
+  }, [value]);
+
   const isCyan = color === 'cyan';
   const strokeColor = isCyan ? '#00ffff' : '#f0abfc'; // cyan or fuchsia
   const glowClass = isCyan ? 'drop-shadow-[0_0_10px_rgba(0,255,255,1)]' : 'drop-shadow-[0_0_10px_rgba(217,70,239,1)]';
   const textClass = isCyan ? 'text-cyan-400' : 'text-fuchsia-400';
 
-  const dasharray = 301.59;
-  const progressOffset = dasharray - (dasharray * parseInt(value) / 100);
+  const dasharray = 264; // roughly 2 * PI * 42
+  const progressOffset = dasharray - (dasharray * displayValue / 100);
 
   return (
     <div className={`relative flex flex-col items-center justify-center w-20 h-20 xl:w-24 xl:h-24 ${glowClass}`}>
@@ -20,15 +27,15 @@ const CyberGauge = ({ value, label, color, unit, prefix = '' }: any) => {
             cx="50%" cy="50%" r="42%" 
             stroke={strokeColor} 
             strokeWidth="3" fill="transparent" 
-            strokeDasharray={264} // updated to roughly match 42% of 100 radius scale
-            strokeDashoffset={264 - (264 * parseInt(value) / 100)} 
+            strokeDasharray={dasharray}
+            strokeDashoffset={progressOffset} 
             strokeLinecap="square"
             className="transition-all duration-1000 ease-out" 
         />
       </svg>
       <div className="flex flex-col items-center justify-center z-10 leading-none group-hover:scale-110 transition mt-0.5">
         <span className={`font-orbitron text-lg xl:text-xl font-black tracking-tighter ${textClass}`}>
-          {prefix}{value}<span className="text-xs">{unit}</span>
+          {prefix}{displayValue}<span className="text-xs">{unit}</span>
         </span>
         <span className="text-[7px] xl:text-[8px] font-mono text-gray-300 tracking-widest uppercase text-center mt-1 leading-[1.1] max-w-[60px]">
           {label.split(' ').map((l: string, i: number) => <div key={i}>{l}</div>)}
@@ -103,7 +110,7 @@ export default function Header() {
                  </div>
                  
                  <Link href="/">
-                     <h1 className="font-orbitron text-3xl md:text-4xl lg:text-5xl font-black text-pink-500 tracking-widest uppercase hover:text-pink-400 transition cursor-pointer drop-shadow-[0_0_15px_rgba(255,0,127,0.8)] mt-1">
+                     <h1 className="font-orbitron text-3xl md:text-4xl lg:text-5xl font-black tracking-widest uppercase hover:opacity-80 transition cursor-pointer drop-shadow-[0_0_15px_rgba(255,0,127,0.4)] mt-1 animate-electric-shimmer">
                          OVERRIDE MOTORS
                      </h1>
                  </Link>

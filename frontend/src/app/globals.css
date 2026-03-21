@@ -26,3 +26,24 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes electric-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-electric-shimmer {
+  background: linear-gradient(
+    90deg,
+    #ec4899 0%,
+    #ff007f 25%,
+    #00ffff 50%,
+    #ff007f 75%,
+    #ec4899 100%
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: electric-shimmer 4s linear infinite;
+}
