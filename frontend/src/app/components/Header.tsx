@@ -98,7 +98,7 @@ export default function Header() {
              <div className="flex flex-col items-center lg:items-start text-center lg:text-left z-20">
                  <div className="flex items-center gap-2 mb-1">
                     <div className="text-red-500 font-mono text-[9px] md:text-[10px] xl:text-xs font-bold tracking-widest border border-red-500/50 px-2 py-0.5 bg-red-900/20 drop-shadow-[0_0_8px_rgba(255,0,0,0.8)] uppercase">
-                       <span className="animate-pulse mr-2">⚠️</span> ACCESS LEVEL: PREMIUM
+                       <span className="animate-pulse mr-2">⚠️</span> ACCESS LEVEL: CYBER-CORE [PRO]
                     </div>
                  </div>
                  
