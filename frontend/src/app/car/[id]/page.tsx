@@ -39,13 +39,13 @@ export default async function CarDetail(props: { params: Promise<{ id: string }>
       <div className="max-w-[1400px] mx-auto p-4 md:p-8 lg:p-12 relative z-10">
         
         {/* Back Link */}
-        <div className="mb-8 group">
-          <Link href="/" className="inline-flex items-center gap-2 text-cyan-500 hover:text-cyan-300 font-mono text-xs font-bold uppercase tracking-[0.3em] transition">
-            <span className="group-hover:-translate-x-1 transition-transform">[&lt;&lt;]</span> RETURN_TO_SYSTEM_FEED
+        <div className="mb-6 group">
+          <Link href="/" className="inline-flex items-center gap-2 text-cyan-500 hover:text-cyan-400 font-mono text-sm font-bold uppercase tracking-[0.3em] transition bg-cyan-950/20 px-4 py-2 border border-cyan-500/30 rounded-sm">
+            <span className="group-hover:-translate-x-1 transition-transform">«</span> RETURN_TO_SYSTEM_FEED
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20 items-start">
           
           {/* LEFT COLUMN - VISUALS */}
           <div className="relative">
@@ -83,16 +83,19 @@ export default async function CarDetail(props: { params: Promise<{ id: string }>
                   </div>
               </div>
 
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 p-6 lg:p-8 bg-black/40 border-y border-white/5 backdrop-blur-md relative overflow-hidden group">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-6 lg:p-8 bg-black/40 border-y border-white/5 backdrop-blur-md relative overflow-hidden group">
                   <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-transparent pointer-events-none"></div>
                   <div className="flex flex-col z-10">
-                      <span className="text-gray-500 font-mono text-[10px] font-bold tracking-[0.3em] uppercase mb-2">ACQUISITION_VALUE</span>
-                      <span className="font-orbitron text-4xl md:text-5xl lg:text-6xl font-black text-[#ff8c00] drop-shadow-[0_0_20px_rgba(255,140,0,0.8)] leading-none transition-transform group-hover:scale-105 duration-500">
-                          € {car.price.toLocaleString('de-DE')}
-                      </span>
+                      <span className="text-gray-500 font-mono text-[10px] font-bold tracking-[0.3em] uppercase mb-1">ACQUISITION_VALUE</span>
+                      <div className="flex items-baseline gap-2">
+                        <span className="font-orbitron text-2xl md:text-3xl text-orange-600/80 font-bold">€</span>
+                        <span className="font-orbitron text-4xl md:text-5xl lg:text-6xl font-black text-[#ff8c00] drop-shadow-[0_0_20px_rgba(255,140,0,0.8)] leading-tight transition-transform group-hover:scale-105 duration-500">
+                            {car.price.toLocaleString('de-DE')}
+                        </span>
+                      </div>
                   </div>
-                  <div className="z-10">
-                      <button className="px-10 py-5 bg-pink-600 hover:bg-pink-500 text-white font-orbitron font-black uppercase tracking-[0.2em] text-lg transition duration-300 shadow-[0_0_30px_rgba(255,0,127,0.5)] border-2 border-pink-400 group-hover:shadow-[0_0_50px_rgba(255,0,127,0.8)] active:scale-95">
+                  <div className="z-10 flex-shrink-0">
+                      <button className="whitespace-nowrap px-8 py-4 md:px-10 md:py-5 bg-pink-600 hover:bg-pink-500 text-white font-orbitron font-black uppercase tracking-[0.2em] text-base md:text-lg transition duration-300 shadow-[0_0_30px_rgba(255,0_127,0,0.5)] border-2 border-pink-400 group-hover:shadow-[0_0_50px_rgba(255,0,127,0.8)] active:scale-95 w-full sm:w-auto">
                           INITIATE_TRANSFER
                       </button>
                   </div>
