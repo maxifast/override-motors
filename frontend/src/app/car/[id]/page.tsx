@@ -1,5 +1,6 @@
 import { prisma } from "../../../lib/prisma";
 import Link from 'next/link';
+import CarGallery from '../../../components/CarGallery';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,26 +43,7 @@ export default async function CarDetail({ params }: { params: { id: string } }) 
       <div className="max-w-[1200px] mx-auto p-4 md:p-8 mt-4 grid grid-cols-1 lg:grid-cols-2 gap-10">
         
         {/* LEFT COLLUMN - VISUALS */}
-        <div className="space-y-4">
-            <div className="border border-cyan-500/40 p-1 bg-gray-900 relative shadow-[0_0_20px_rgba(0,255,255,0.1)] group overflow-hidden">
-                {/* Holographic scanner line overlay */}
-                <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-400 opacity-60 shadow-[0_0_8px_#0ff] z-10 hidden group-hover:block translate-y-full hover:animate-[scan_2s_linear_infinite]"></div>
-                
-                {car.images && car.images.length > 0 ? (
-                    <img src={car.images[0]} className="w-full h-auto object-cover opacity-90 transition duration-500" alt={car.title} />
-                ) : (
-                    <div className="w-full h-80 flex items-center justify-center border border-dashed border-gray-700 text-gray-500">IMAGE STREAM OFFLINE</div>
-                )}
-            </div>
-
-            <div className="grid grid-cols-3 gap-2">
-                {car.images && car.images.slice(1).map((img, idx) => (
-                    <div key={idx} className="border border-gray-800 hover:border-pink-500 transition-colors cursor-pointer opacity-70 hover:opacity-100 overflow-hidden">
-                        <img src={img} className="w-full h-24 object-cover" alt="Detail view" />
-                    </div>
-                ))}
-            </div>
-        </div>
+        <CarGallery images={car.images || []} title={car.title} />
 
         {/* RIGHT COLUMN - DATA & SPECS */}
         <div className="flex flex-col gap-6">
