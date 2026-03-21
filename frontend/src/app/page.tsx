@@ -16,7 +16,27 @@ async function getCars(searchParams: { make?: string, damage?: string, fuel?: st
       where.fuel_type = searchParams.fuel;
     }
     if (searchParams.q) {
-      where.title = { contains: searchParams.q, mode: 'insensitive' };
+      const q = searchParams.q.trim();
+      const yearMatch = q.match(/\b(19\d{2}|20\d{2})\b/);
+      
+      if (yearMatch) {
+        const yearVal = parseInt(yearMatch[1]);
+        const textQ = q.replace(yearMatch[1], '').trim();
+        
+        if (textQ) {
+          where.AND = [
+            { year: yearVal },
+            { title: { contains: textQ, mode: 'insensitive' } }
+          ];
+        } else {
+          where.OR = [
+            { title: { contains: q, mode: 'insensitive' } },
+            { year: yearVal }
+          ];
+        }
+      } else {
+        where.title = { contains: q, mode: 'insensitive' };
+      }
     }
 
     const rawCars = await prisma.car.findMany({
