@@ -7,10 +7,15 @@ import TransferSection from '../../components/TransferSection';
 export const dynamic = 'force-dynamic';
 
 export default async function CarDetail(props: { params: Promise<{ id: string }> }) {
-  const params = await props.params;
-  const carId = parseInt(params.id);
+  const { id } = await props.params;
+  const carId = parseInt(id, 10);
+  
   if (isNaN(carId)) {
-    return <div className="text-white text-center p-20 font-orbitron uppercase tracking-widest text-red-500">INVALID SIGNAL DETECTED</div>;
+    return (
+      <div className="text-white text-center p-20 font-orbitron uppercase tracking-widest text-red-500">
+        INVALID SIGNAL DETECTED: {id}
+      </div>
+    );
   }
 
   const car = await prisma.car.findUnique({
@@ -85,7 +90,7 @@ export default async function CarDetail(props: { params: Promise<{ id: string }>
               </div>
 
               {/* INTERACTIVE TRANSFER SECTION (CLIENT COMPONENT) */}
-              <TransferSection carPrice={car.price} />
+              <TransferSection carPrice={car.price} originalUrl={car.original_url} />
 
 
               {/* NEON PANELS */}
