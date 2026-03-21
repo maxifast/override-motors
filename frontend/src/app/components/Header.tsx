@@ -13,24 +13,24 @@ const CyberGauge = ({ value, label, color, unit, prefix = '' }: any) => {
   const progressOffset = dasharray - (dasharray * parseInt(value) / 100);
 
   return (
-    <div className={`relative flex flex-col items-center justify-center w-24 h-24 xl:w-28 xl:h-28 ${glowClass}`}>
+    <div className={`relative flex flex-col items-center justify-center w-20 h-20 xl:w-24 xl:h-24 ${glowClass}`}>
       <svg className="absolute inset-0 w-full h-full transform -rotate-90">
-        <circle cx="50%" cy="50%" r="42%" stroke="#1f2937" strokeWidth="4" fill="transparent" />
+        <circle cx="50%" cy="50%" r="42%" stroke="#1f2937" strokeWidth="3" fill="transparent" />
         <circle 
             cx="50%" cy="50%" r="42%" 
             stroke={strokeColor} 
-            strokeWidth="4" fill="transparent" 
+            strokeWidth="3" fill="transparent" 
             strokeDasharray={264} // updated to roughly match 42% of 100 radius scale
             strokeDashoffset={264 - (264 * parseInt(value) / 100)} 
             strokeLinecap="square"
             className="transition-all duration-1000 ease-out" 
         />
       </svg>
-      <div className="flex flex-col items-center justify-center z-10 leading-none group-hover:scale-110 transition">
-        <span className={`text-xl xl:text-2xl font-black tracking-tighter ${textClass}`}>
-          {prefix}{value}<span className="text-sm">{unit}</span>
+      <div className="flex flex-col items-center justify-center z-10 leading-none group-hover:scale-110 transition mt-0.5">
+        <span className={`text-lg xl:text-xl font-black tracking-tighter ${textClass}`} style={{ fontFamily: "'Orbitron', sans-serif" }}>
+          {prefix}{value}<span className="text-xs">{unit}</span>
         </span>
-        <span className="text-[8px] xl:text-[9px] font-mono text-gray-300 tracking-widest uppercase text-center mt-1 leading-[1.1] max-w-[70px]">
+        <span className="text-[7px] xl:text-[8px] font-mono text-gray-300 tracking-widest uppercase text-center mt-1 leading-[1.1] max-w-[60px]">
           {label.split(' ').map((l: string, i: number) => <div key={i}>{l}</div>)}
         </span>
       </div>
@@ -39,13 +39,13 @@ const CyberGauge = ({ value, label, color, unit, prefix = '' }: any) => {
 };
 
 const BarChartDecal = () => (
-    <div className="flex flex-col justify-center gap-1.5 h-16 xl:h-20 opacity-80 drop-shadow-[0_0_8px_rgba(0,255,255,0.8)] mr-4">
-        <div className="w-8 xl:w-10 h-1.5 bg-cyan-600 rounded-sm"></div>
-        <div className="w-6 xl:w-8 h-1.5 bg-cyan-400 rounded-sm"></div>
-        <div className="w-8 xl:w-10 h-1.5 bg-cyan-800 rounded-sm"></div>
-        <div className="w-4 xl:w-6 h-1.5 bg-cyan-500 rounded-sm"></div>
-        <div className="w-10 xl:w-12 h-1.5 bg-cyan-700 rounded-sm"></div>
-        <div className="w-6 xl:w-8 h-1.5 bg-cyan-600 rounded-sm"></div>
+    <div className="flex flex-col justify-center gap-1 h-12 xl:h-16 opacity-80 drop-shadow-[0_0_8px_rgba(0,255,255,0.8)] mr-2 xl:mr-4">
+        <div className="w-8 xl:w-10 h-1 bg-cyan-600 rounded-sm"></div>
+        <div className="w-6 xl:w-8 h-1 bg-cyan-400 rounded-sm"></div>
+        <div className="w-8 xl:w-10 h-1 bg-cyan-800 rounded-sm"></div>
+        <div className="w-4 xl:w-6 h-1 bg-cyan-500 rounded-sm"></div>
+        <div className="w-10 xl:w-12 h-1 bg-cyan-700 rounded-sm"></div>
+        <div className="w-6 xl:w-8 h-1 bg-cyan-600 rounded-sm"></div>
     </div>
 );
 
@@ -89,36 +89,36 @@ export default function Header() {
            }}>
       </div>
 
-      <div className="relative z-10 max-w-[1600px] mx-auto p-4 lg:p-6 flex flex-col gap-6">
+      <div className="relative z-10 max-w-[1600px] mx-auto p-3 lg:p-4 flex flex-col gap-4">
 
          {/* Top Area: Logo & Gauges */}
-         <div className="flex flex-col lg:flex-row items-center lg:items-end justify-between gap-8 w-full">
+         <div className="flex flex-col lg:flex-row items-center lg:items-end justify-between gap-6 w-full">
              
              {/* Left Side: Logo & Titles */}
              <div className="flex flex-col items-center lg:items-start text-center lg:text-left z-20">
-                 <div className="flex items-center gap-2 mb-2">
-                    <div className="text-red-500 font-mono text-[10px] md:text-xs font-bold tracking-widest border border-red-500/50 px-2 py-1 bg-red-900/20 drop-shadow-[0_0_8px_rgba(255,0,0,0.8)] uppercase">
+                 <div className="flex items-center gap-2 mb-1">
+                    <div className="text-red-500 font-mono text-[9px] md:text-[10px] xl:text-xs font-bold tracking-widest border border-red-500/50 px-2 py-0.5 bg-red-900/20 drop-shadow-[0_0_8px_rgba(255,0,0,0.8)] uppercase">
                        <span className="animate-pulse mr-2">⚠️</span> ACCESS LEVEL: PREMIUM
                     </div>
                  </div>
                  
                  <Link href="/">
-                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-pink-500 tracking-widest uppercase hover:text-pink-400 transition cursor-pointer drop-shadow-[0_0_20px_rgba(255,0,127,0.8)] mt-1">
+                     <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-pink-500 tracking-widest uppercase hover:text-pink-400 transition cursor-pointer drop-shadow-[0_0_15px_rgba(255,0,127,0.8)] mt-1" style={{ fontFamily: "'Orbitron', sans-serif" }}>
                          OVERRIDE MOTORS
                      </h1>
                  </Link>
 
-                 <div className="flex items-center gap-2 mt-3">
+                 <div className="flex items-center gap-2 mt-2">
                      <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(0,255,255,1)] animate-ping absolute"></div>
                      <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(0,255,255,1)] relative"></div>
-                     <span className="text-cyan-400 font-mono text-[9px] md:text-xs font-bold tracking-[0.2em] border border-cyan-400/30 px-3 py-1 bg-cyan-900/10 drop-shadow-[0_0_8px_rgba(0,255,255,0.7)] uppercase ml-2">
+                     <span className="text-cyan-400 font-mono text-[8px] md:text-[10px] xl:text-xs font-bold tracking-[0.2em] border border-cyan-400/30 px-3 py-0.5 bg-cyan-900/10 drop-shadow-[0_0_8px_rgba(0,255,255,0.7)] uppercase ml-2">
                          PREMIUM EU SALVAGE ASSETS
                      </span>
                  </div>
              </div>
 
              {/* Right Side: Cyber Gauges */}
-             <div className="hidden md:flex items-center gap-2 xl:gap-6 bg-black/40 p-4 rounded-xl border border-white/5 backdrop-blur-sm shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] z-20">
+             <div className="hidden md:flex items-center gap-2 xl:gap-4 bg-black/40 p-3 rounded-xl border border-white/5 backdrop-blur-sm shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] z-20">
                  <BarChartDecal />
                  <CyberGauge value="92" label="DAMAGE ASSESSMENT" color="cyan" unit="%" />
                  <CyberGauge value="18" label="REPAIR EST." color="pink" unit="k" prefix="€" />
@@ -127,7 +127,7 @@ export default function Header() {
          </div>
 
          {/* Bottom Area: Controls/Filters */}
-         <div className="flex flex-wrap items-center gap-3 w-full bg-[#0a0a0f]/80 p-3 rounded-lg border border-cyan-900/50 backdrop-blur-md shadow-[0_0_15px_rgba(0,255,255,0.05)] z-20">
+         <div className="flex flex-wrap items-center gap-3 w-full bg-[#0a0a0f]/80 p-2 lg:p-3 rounded-lg border border-cyan-900/50 backdrop-blur-md shadow-[0_0_15px_rgba(0,255,255,0.05)] z-20">
             <select 
                 value={make} 
                 onChange={(e) => { setMake(e.target.value); applyFilters(e.target.value, undefined, undefined, undefined); }}
