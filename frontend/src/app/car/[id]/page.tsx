@@ -94,8 +94,8 @@ export default async function CarDetail(props: { params: Promise<{ id: string }>
                         </span>
                       </div>
                   </div>
-                  <div className="z-10 flex-shrink-0">
-                      <button className="whitespace-nowrap px-8 py-4 md:px-10 md:py-5 bg-pink-600 hover:bg-pink-500 text-white font-orbitron font-black uppercase tracking-[0.2em] text-base md:text-lg transition duration-300 shadow-[0_0_30px_rgba(255,0_127,0,0.5)] border-2 border-pink-400 group-hover:shadow-[0_0_50px_rgba(255,0,127,0.8)] active:scale-95 w-full sm:w-auto">
+                  <div className="z-10 flex-shrink-0 w-full sm:w-auto">
+                      <button className="w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 bg-pink-600 hover:bg-pink-500 text-white font-orbitron font-extrabold uppercase tracking-widest text-sm md:text-base lg:text-lg transition duration-300 shadow-[0_0_30px_rgba(255,0,127,0.5)] border-2 border-pink-400 group-hover:shadow-[0_0_50px_rgba(255,0,127,0.8)] active:scale-95 text-center flex items-center justify-center min-w-[180px]">
                           INITIATE_TRANSFER
                       </button>
                   </div>
