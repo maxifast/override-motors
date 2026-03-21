@@ -83,13 +83,13 @@ export default async function CarDetail(props: { params: Promise<{ id: string }>
                   </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-6 lg:p-8 bg-black/40 border-y border-white/5 backdrop-blur-md relative overflow-hidden group">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-6 lg:p-8 bg-black/40 border-y border-white/5 backdrop-blur-md relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-transparent pointer-events-none"></div>
-                  <div className="flex flex-col z-10">
+                  <div className="flex flex-col z-10 shrink-0">
                       <span className="text-gray-500 font-mono text-[10px] font-bold tracking-[0.3em] uppercase mb-1">ACQUISITION_VALUE</span>
                       <div className="flex items-baseline gap-2">
                         <span className="font-orbitron text-2xl md:text-3xl text-orange-600/80 font-bold">€</span>
-                        <span className="font-orbitron text-4xl md:text-5xl lg:text-6xl font-black text-[#ff8c00] drop-shadow-[0_0_20px_rgba(255,140,0,0.8)] leading-tight transition-transform group-hover:scale-105 duration-500">
+                        <span className="font-orbitron text-3xl sm:text-4xl lg:text-5xl font-black text-[#ff8c00] drop-shadow-[0_0_20px_rgba(255,140,0,0.8)] leading-tight transition-transform group-hover:scale-105 duration-500">
                             {car.price.toLocaleString('de-DE')}
                         </span>
                       </div>
