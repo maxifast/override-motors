@@ -36,28 +36,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var playwright_1 = require("playwright");
-(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var b, p, imgs;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, playwright_1.chromium.launch()];
-            case 1:
-                b = _a.sent();
-                return [4 /*yield*/, b.newPage()];
-            case 2:
-                p = _a.sent();
-                return [4 /*yield*/, p.goto("https://www.schadeautos.nl/nl/schade/personenautos/bmw-5-serie-540i-xdrive-luxury-line-leer-led/o/1756499", { waitUntil: 'domcontentloaded' })];
-            case 3:
-                _a.sent();
-                return [4 /*yield*/, p.$$eval('img', function (imgs) { return imgs.map(function (i) { return i.src; }); })];
-            case 4:
-                imgs = _a.sent();
-                console.log(imgs.filter(function (s) { return s.includes('1756499'); }));
-                return [4 /*yield*/, b.close()];
-            case 5:
-                _a.sent();
-                return [2 /*return*/];
-        }
+var client_1 = require("@prisma/client");
+var prisma = new client_1.PrismaClient();
+function check() {
+    return __awaiter(this, void 0, void 0, function () {
+        var cars;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, prisma.car.findMany({
+                        where: { source: 'schadeautos.nl/cloud-sync' },
+                        select: { title: true, year: true, fuel_type: true, mileage: true }
+                    })];
+                case 1:
+                    cars = _a.sent();
+                    console.log("Checking ".concat(cars.length, " active cars in DB:"));
+                    cars.forEach(function (c) { return console.log("- ".concat(c.title, " | Year: ").concat(c.year, " | Fuel: ").concat(c.fuel_type, " | Mileage: ").concat(c.mileage)); });
+                    return [2 /*return*/];
+            }
+        });
     });
-}); })();
+}
+check().catch(console.error).finally(function () { return prisma.$disconnect(); });

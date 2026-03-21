@@ -27,7 +27,7 @@ const CyberGauge = ({ value, label, color, unit, prefix = '' }: any) => {
         />
       </svg>
       <div className="flex flex-col items-center justify-center z-10 leading-none group-hover:scale-110 transition mt-0.5">
-        <span className={`text-lg xl:text-xl font-black tracking-tighter ${textClass}`} style={{ fontFamily: "'Orbitron', sans-serif" }}>
+        <span className={`font-orbitron text-lg xl:text-xl font-black tracking-tighter ${textClass}`}>
           {prefix}{value}<span className="text-xs">{unit}</span>
         </span>
         <span className="text-[7px] xl:text-[8px] font-mono text-gray-300 tracking-widest uppercase text-center mt-1 leading-[1.1] max-w-[60px]">
@@ -103,7 +103,7 @@ export default function Header() {
                  </div>
                  
                  <Link href="/">
-                     <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-pink-500 tracking-widest uppercase hover:text-pink-400 transition cursor-pointer drop-shadow-[0_0_15px_rgba(255,0,127,0.8)] mt-1" style={{ fontFamily: "'Orbitron', sans-serif" }}>
+                     <h1 className="font-orbitron text-3xl md:text-4xl lg:text-5xl font-black text-pink-500 tracking-widest uppercase hover:text-pink-400 transition cursor-pointer drop-shadow-[0_0_15px_rgba(255,0,127,0.8)] mt-1">
                          OVERRIDE MOTORS
                      </h1>
                  </Link>

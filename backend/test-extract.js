@@ -36,30 +36,56 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var client_1 = require("@prisma/client");
-var prisma = new client_1.PrismaClient();
-function check() {
+var playwright_1 = require("playwright");
+function testH() {
     return __awaiter(this, void 0, void 0, function () {
-        var cars, scraped;
+        var browser, context, page, url, html, titleMatch, title, mileageMatch1, odo;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.car.findMany({ where: { is_pinned: true } })];
+                case 0: return [4 /*yield*/, playwright_1.chromium.launch({ headless: true })];
                 case 1:
-                    cars = _a.sent();
-                    console.log(JSON.stringify(cars.map(function (c) { return ({ id: c.id, title: c.title, original_url: c.original_url, images: c.images }); }), null, 2));
-                    // Auto-delete the badly generated image ones
-                    return [4 /*yield*/, prisma.car.deleteMany({ where: { source: 'schadeautos.nl/targeted-injection' } })];
+                    browser = _a.sent();
+                    return [4 /*yield*/, browser.newContext({
+                            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                        })];
                 case 2:
-                    // Auto-delete the badly generated image ones
-                    _a.sent();
-                    return [4 /*yield*/, prisma.car.findMany({ where: { source: 'schadeautos.nl/real-targeted' } })];
+                    context = _a.sent();
+                    return [4 /*yield*/, context.newPage()];
                 case 3:
-                    scraped = _a.sent();
-                    console.log("Scraped from automated playwright search:");
-                    console.log(JSON.stringify(scraped.map(function (c) { return ({ title: c.title, images: c.images }); }), null, 2));
+                    page = _a.sent();
+                    url = 'https://www.schadeautos.nl/en/damaged/passenger-cars/volkswagen-id-4-pro-77-kwh/o/1753051';
+                    console.log("Navigating to:", url);
+                    return [4 /*yield*/, page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 })];
+                case 4:
+                    _a.sent();
+                    return [4 /*yield*/, page.content()];
+                case 5:
+                    html = _a.sent();
+                    titleMatch = html.match(/<h1[^>]*>(.*?)<\/h1>/i);
+                    title = titleMatch ? titleMatch[1].replace(/<[^>]+>/g, '').trim().replace(/\s+/g, ' ') : '';
+                    console.log("Original Title:", title);
+                    title = title.replace(/Damaged\s*(car|commercial vehicles|vehicle)?/i, '').trim();
+                    console.log("Cleaned Title:", title);
+                    mileageMatch1 = html.match(/(?:Odometer reading|Kilometerstand)[\s\S]{0,100}?(\d+[\d.,]*)(?:\s*km)?/i);
+                    console.log("Regex 1 match:", mileageMatch1 ? mileageMatch1[1] : 'null');
+                    return [4 /*yield*/, page.$$eval('th, td, div, span', function (els) {
+                            var _a, _b, _c, _d;
+                            for (var i = 0; i < els.length; i++) {
+                                if (((_a = els[i].textContent) === null || _a === void 0 ? void 0 : _a.toLowerCase().includes('odometer')) || ((_b = els[i].textContent) === null || _b === void 0 ? void 0 : _b.toLowerCase().includes('kilometerstand'))) {
+                                    return ((_c = els[i].nextElementSibling) === null || _c === void 0 ? void 0 : _c.textContent) || ((_d = els[i].parentElement) === null || _d === void 0 ? void 0 : _d.textContent);
+                                }
+                            }
+                            return null;
+                        })];
+                case 6:
+                    odo = _a.sent();
+                    console.log("DOM search parent/sibling:", odo);
+                    return [4 /*yield*/, browser.close()];
+                case 7:
+                    _a.sent();
                     return [2 /*return*/];
             }
         });
     });
 }
-check().then(function () { return process.exit(0); });
+testH();

@@ -35,73 +35,54 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var querystring_1 = __importDefault(require("querystring"));
-function searchDuckDuckGo(brand) {
+var playwright_1 = require("playwright");
+function testH() {
     return __awaiter(this, void 0, void 0, function () {
-        var query, url, response, html, match, resultUrl, decoded;
+        var browser, context, page, html, cars;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    query = "site:schadeautos.nl/en/damaged/passenger-cars/ ".concat(brand);
-                    url = "https://html.duckduckgo.com/html/?q=".concat(querystring_1.default.escape(query));
-                    return [4 /*yield*/, fetch(url, {
-                            headers: {
-                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
-                            }
+                case 0: return [4 /*yield*/, playwright_1.chromium.launch({ headless: true })];
+                case 1:
+                    browser = _a.sent();
+                    return [4 /*yield*/, browser.newContext({
+                            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                            viewport: { width: 1920, height: 1080 }
                         })];
-                case 1:
-                    response = _a.sent();
-                    if (!response.ok)
-                        return [2 /*return*/, null];
-                    return [4 /*yield*/, response.text()];
                 case 2:
-                    html = _a.sent();
-                    match = html.match(/href="([^"]+schadeautos\.nl\/en\/damaged\/passenger-cars\/[^"]+)"/);
-                    if (match) {
-                        resultUrl = match[1];
-                        if (resultUrl.includes('uddg=')) {
-                            decoded = decodeURIComponent(resultUrl.split('uddg=')[1].split('&')[0]);
-                            return [2 /*return*/, decoded];
-                        }
-                        return [2 /*return*/, resultUrl];
-                    }
-                    return [2 /*return*/, null];
-            }
-        });
-    });
-}
-function main() {
-    return __awaiter(this, void 0, void 0, function () {
-        var brands, _i, brands_1, b, url;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    brands = ['Toyota', 'BMW', 'Mercedes-Benz', 'Jaguar', 'Honda'];
-                    _i = 0, brands_1 = brands;
-                    _a.label = 1;
-                case 1:
-                    if (!(_i < brands_1.length)) return [3 /*break*/, 5];
-                    b = brands_1[_i];
-                    return [4 /*yield*/, searchDuckDuckGo(b)];
-                case 2:
-                    url = _a.sent();
-                    console.log("".concat(b, ": ").concat(url || 'Not Found'));
-                    // Let's delay slightly to avoid DDG rate limits
-                    return [4 /*yield*/, new Promise(function (r) { return setTimeout(r, 1000); })];
+                    context = _a.sent();
+                    return [4 /*yield*/, context.newPage()];
                 case 3:
-                    // Let's delay slightly to avoid DDG rate limits
-                    _a.sent();
-                    _a.label = 4;
+                    page = _a.sent();
+                    // Construct URL with filters: 
+                    // Schadautos search parameters can often be sent via POST or GET params if we know them.
+                    // Let's just go to the homepage and fill the form.
+                    return [4 /*yield*/, page.goto('https://www.schadeautos.nl/en/damaged/passenger-cars', { waitUntil: 'domcontentloaded' })];
                 case 4:
-                    _i++;
-                    return [3 /*break*/, 1];
-                case 5: return [2 /*return*/];
+                    // Construct URL with filters: 
+                    // Schadautos search parameters can often be sent via POST or GET params if we know them.
+                    // Let's just go to the homepage and fill the form.
+                    _a.sent();
+                    return [4 /*yield*/, page.content()];
+                case 5:
+                    html = _a.sent();
+                    console.log("HTML len:", html.length, "includes e-tron:", html.toLowerCase().includes('audi'));
+                    return [4 /*yield*/, page.$$eval('a', function (anchors) { return Array.from(anchors).map(function (a) { return a.href; }).filter(function (h) { return h.includes('/o/'); }); })];
+                case 6:
+                    cars = _a.sent();
+                    console.log("Cars array length:", cars.length);
+                    if (cars.length > 5) {
+                        console.log('Real listings found!', cars.slice(0, 3));
+                    }
+                    else {
+                        console.log('STILL BLOCKED. Only 5 fallback cars.');
+                    }
+                    return [4 /*yield*/, browser.close()];
+                case 7:
+                    _a.sent();
+                    return [2 /*return*/];
             }
         });
     });
 }
-main().catch(console.error);
+testH();

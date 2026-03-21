@@ -37,27 +37,40 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var playwright_1 = require("playwright");
-(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var b, p, hrefs;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, playwright_1.chromium.launch()];
-            case 1:
-                b = _a.sent();
-                return [4 /*yield*/, b.newPage()];
-            case 2:
-                p = _a.sent();
-                return [4 /*yield*/, p.goto("https://www.schadeautos.nl/en/schadeautos", { waitUntil: 'domcontentloaded' })];
-            case 3:
-                _a.sent();
-                return [4 /*yield*/, p.$$eval('a', function (links) { return links.map(function (l) { return l.innerText + ' | ' + l.href; }).filter(function (text) { return text.toLowerCase().includes('passenger'); }); })];
-            case 4:
-                hrefs = _a.sent();
-                console.log(hrefs.join('\n'));
-                return [4 /*yield*/, b.close()];
-            case 5:
-                _a.sent();
-                return [2 /*return*/];
-        }
+function testUrl() {
+    return __awaiter(this, void 0, void 0, function () {
+        var browser, context, page, url, cars;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, playwright_1.chromium.launch({ headless: true })];
+                case 1:
+                    browser = _a.sent();
+                    return [4 /*yield*/, browser.newContext({
+                            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                        })];
+                case 2:
+                    context = _a.sent();
+                    return [4 /*yield*/, context.newPage()];
+                case 3:
+                    page = _a.sent();
+                    url = 'https://www.schadeautos.nl/en/search/damaged/passenger-cars+audi/1/1/6/0/46/0/1/0?p=2020-&odo=0-200000&fuel=electric';
+                    console.log("Navigating to:", url);
+                    return [4 /*yield*/, page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 })];
+                case 4:
+                    _a.sent();
+                    return [4 /*yield*/, page.$$eval('a', function (anchors) { return Array.from(anchors).map(function (a) { return a.href; }).filter(function (h) { return h.includes('/o/'); }); })];
+                case 5:
+                    cars = _a.sent();
+                    console.log("Found cars count:", cars.length);
+                    if (cars.length > 0) {
+                        console.log("Cars:", Array.from(new Set(cars)).slice(0, 5));
+                    }
+                    return [4 /*yield*/, browser.close()];
+                case 6:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
     });
-}); })();
+}
+testUrl();

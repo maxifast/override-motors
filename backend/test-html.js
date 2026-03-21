@@ -37,35 +37,47 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var playwright_1 = require("playwright");
-(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var b, p, selects, inputs;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, playwright_1.chromium.launch()];
-            case 1:
-                b = _a.sent();
-                return [4 /*yield*/, b.newPage()];
-            case 2:
-                p = _a.sent();
-                return [4 /*yield*/, p.goto("https://www.schadeautos.nl/en/search", { waitUntil: 'domcontentloaded' })];
-            case 3:
-                _a.sent();
-                return [4 /*yield*/, p.$$eval('select', function (selects) { return selects.map(function (s) { return ({
-                        id: s.id,
-                        name: s.name,
-                        options: Array.from(s.options).slice(0, 5).map(function (o) { return o.text + ':' + o.value; })
-                    }); }); })];
-            case 4:
-                selects = _a.sent();
-                console.log(JSON.stringify(selects, null, 2));
-                return [4 /*yield*/, p.$$eval('input', function (inputs) { return inputs.map(function (i) { return ({ id: i.id, name: i.name, type: i.type }); }); })];
-            case 5:
-                inputs = _a.sent();
-                console.log(JSON.stringify(inputs, null, 2));
-                return [4 /*yield*/, b.close()];
-            case 6:
-                _a.sent();
-                return [2 /*return*/];
-        }
+function testH() {
+    return __awaiter(this, void 0, void 0, function () {
+        var browser, context, page, url, html, lines, _i, lines_1, l, props;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, playwright_1.chromium.launch({ headless: true })];
+                case 1:
+                    browser = _a.sent();
+                    return [4 /*yield*/, browser.newContext({
+                            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                        })];
+                case 2:
+                    context = _a.sent();
+                    return [4 /*yield*/, context.newPage()];
+                case 3:
+                    page = _a.sent();
+                    url = 'https://www.schadeautos.nl/en/damaged/passenger-cars/volkswagen-id-4-pro-77-kwh/o/1753051';
+                    return [4 /*yield*/, page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 })];
+                case 4:
+                    _a.sent();
+                    return [4 /*yield*/, page.content()];
+                case 5:
+                    html = _a.sent();
+                    lines = html.split('\n');
+                    console.log("Lines with 'km':");
+                    for (_i = 0, lines_1 = lines; _i < lines_1.length; _i++) {
+                        l = lines_1[_i];
+                        if (l.toLowerCase().includes('km') && l.replace(/<[^>]+>/g, '').length < 100) {
+                            console.log(l.replace(/<[^>]+>/g, '').trim());
+                        }
+                    }
+                    return [4 /*yield*/, page.$$eval('#properties tr', function (trs) { return trs.map(function (tr) { var _a; return ((_a = tr.textContent) === null || _a === void 0 ? void 0 : _a.trim()) || ''; }); })];
+                case 6:
+                    props = _a.sent();
+                    console.log("Properties Table:", props.slice(0, 10));
+                    return [4 /*yield*/, browser.close()];
+                case 7:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
     });
-}); })();
+}
+testH();

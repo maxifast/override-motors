@@ -37,38 +37,37 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var playwright_1 = require("playwright");
-(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var b, p, classes;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, playwright_1.chromium.launch()];
-            case 1:
-                b = _a.sent();
-                return [4 /*yield*/, b.newPage()];
-            case 2:
-                p = _a.sent();
-                return [4 /*yield*/, p.goto("https://www.schadeautos.nl/en/search", { waitUntil: 'domcontentloaded' })];
-            case 3:
-                _a.sent();
-                return [4 /*yield*/, p.selectOption('select[name="widget[make]"]', { label: 'Toyota' })];
-            case 4:
-                _a.sent();
-                return [4 /*yield*/, p.click('#srch_btn', { force: true })];
-            case 5:
-                _a.sent();
-                return [4 /*yield*/, p.waitForTimeout(3000)];
-            case 6:
-                _a.sent();
-                return [4 /*yield*/, p.$$eval('a[href*="/damaged/passenger-cars/"]', function (links) {
-                        return Array.from(new Set(links.map(function (l) { var _a; return ((_a = l.parentElement) === null || _a === void 0 ? void 0 : _a.className) || 'none'; })));
-                    })];
-            case 7:
-                classes = _a.sent();
-                console.log(classes);
-                return [4 /*yield*/, b.close()];
-            case 8:
-                _a.sent();
-                return [2 /*return*/];
-        }
+function testUI() {
+    return __awaiter(this, void 0, void 0, function () {
+        var browser, page, cars;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log("Launching HEADLESS: FALSE browser...");
+                    return [4 /*yield*/, playwright_1.chromium.launch({ headless: false })];
+                case 1:
+                    browser = _a.sent();
+                    return [4 /*yield*/, browser.newPage()];
+                case 2:
+                    page = _a.sent();
+                    return [4 /*yield*/, page.goto('https://www.schadeautos.nl/en/damaged/passenger-cars', { waitUntil: 'domcontentloaded', timeout: 60000 })];
+                case 3:
+                    _a.sent();
+                    // Check if we got the real list
+                    return [4 /*yield*/, page.waitForTimeout(5000)];
+                case 4:
+                    // Check if we got the real list
+                    _a.sent(); // let UI load
+                    return [4 /*yield*/, page.$$eval('a', function (anchors) { return Array.from(anchors).map(function (a) { return a.href; }).filter(function (h) { return h.includes('/o/'); }); })];
+                case 5:
+                    cars = _a.sent();
+                    console.log("Headless: false -> Found ".concat(cars.length, " cars on main page!"));
+                    return [4 /*yield*/, browser.close()];
+                case 6:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
     });
-}); })();
+}
+testUI();

@@ -105,7 +105,7 @@ export default async function Home(props: { searchParams: Promise<{ [key: string
                   </div>
                   <div className="p-4 lg:p-5 flex flex-col flex-1 relative bg-[#050508]">
                     <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"></div>
-                    <h3 className="text-xl md:text-2xl font-black text-white tracking-wide drop-shadow-[0_0_6px_rgba(255,255,255,0.4)] mb-1" style={{ fontFamily: "'Orbitron', sans-serif" }}>
+                    <h3 className="font-orbitron text-xl md:text-2xl font-black text-white tracking-wide drop-shadow-[0_0_6px_rgba(255,255,255,0.4)] mb-1">
                         {car.title}
                     </h3>
                     <div className="flex flex-wrap items-center gap-x-2 text-sm text-cyan-400 mb-5 font-mono drop-shadow-[0_0_5px_rgba(0,255,255,0.5)]">
@@ -116,7 +116,7 @@ export default async function Home(props: { searchParams: Promise<{ [key: string
                         <span>{car.mileage.toLocaleString('de-DE')} KM!</span>
                     </div>
                     <div className="mt-auto pt-2">
-                        <p className="text-2xl md:text-3xl font-black text-[#ff8c00] tracking-widest drop-shadow-[0_0_20px_rgba(255,140,0,0.8)]" style={{ fontFamily: "'Orbitron', sans-serif" }}>
+                        <p className="font-orbitron text-2xl md:text-3xl font-black text-[#ff8c00] tracking-widest drop-shadow-[0_0_20px_rgba(255,140,0,0.8)]">
                             € {car.price.toLocaleString('de-DE')}
                         </p>
                     </div>
