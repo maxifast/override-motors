@@ -4,7 +4,8 @@ import CarGallery from '../../../components/CarGallery';
 
 export const dynamic = 'force-dynamic';
 
-export default async function CarDetail({ params }: { params: { id: string } }) {
+export default async function CarDetail(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const carId = parseInt(params.id);
   if (isNaN(carId)) {
     return <div className="text-white text-center p-20">INVALID SIGNAL DETECTED</div>;
