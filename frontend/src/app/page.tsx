@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 async function getCars(searchParams: { make?: string, damage?: string, fuel?: string, q?: string }) {
   try {
-    const where: any = {};
+    const where: any = { status: 'active' };
     if (searchParams.make && searchParams.make !== 'All Makes') {
       where.brand = { name: searchParams.make };
     }
