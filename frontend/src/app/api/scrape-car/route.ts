@@ -25,8 +25,11 @@ const PREMIUM_BRANDS = [
  * One car per call = safely within 10s timeout.
  */
 export async function GET(request: NextRequest) {
+  // Auth: accepts both Vercel Cron header and ?key= param (for cron-job.org)
   const authHeader = request.headers.get('authorization');
-  if (process.env.CRON_SECRET && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  const keyParam = request.nextUrl.searchParams.get('key');
+  const secret = process.env.CRON_SECRET;
+  if (secret && authHeader !== `Bearer ${secret}` && keyParam !== secret) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
