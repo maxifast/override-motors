@@ -1,8 +1,16 @@
 {
   "crons": [
     {
-      "path": "/api/cron",
-      "schedule": "*/30 8-22 * * *"
+      "path": "/api/scrape-list",
+      "schedule": "0 */2 * * *"
+    },
+    {
+      "path": "/api/scrape-car",
+      "schedule": "*/20 * * * *"
+    },
+    {
+      "path": "/api/cleanup",
+      "schedule": "10,30,50 * * * *"
     }
   ]
 }
