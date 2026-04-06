@@ -86,6 +86,15 @@ export default async function CarDetail(props: { params: Promise<{ id: string }>
                         <span className="block text-[8px] text-green-600 font-mono font-bold tracking-widest uppercase mb-1">POWER_SOURCE</span>
                         <span className="font-orbitron text-green-400 text-lg font-bold uppercase">{car.fuel_type}</span>
                       </div>
+                      <div className="px-4 py-2 bg-amber-900/10 border border-amber-800/50 backdrop-blur-md rounded-sm">
+                        <span className="block text-[8px] text-amber-600 font-mono font-bold tracking-widest uppercase mb-1">LISTED_ON_SOURCE</span>
+                        <span className="font-orbitron text-amber-400 text-lg font-bold">
+                          {car.created_at.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                          <span className="text-sm ml-2 text-amber-500/70">
+                            {car.created_at.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </span>
+                      </div>
                   </div>
               </div>
 

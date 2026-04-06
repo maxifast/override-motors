@@ -11,6 +11,17 @@ interface Car {
   price: number;
   images: string[];
   is_pinned: boolean;
+  created_at: string | Date;
+}
+
+function formatListedDate(dateStr: string | Date): string {
+  const d = new Date(dateStr);
+  const day = d.getDate().toString().padStart(2, '0');
+  const month = (d.getMonth() + 1).toString().padStart(2, '0');
+  const year = d.getFullYear();
+  const hours = d.getHours().toString().padStart(2, '0');
+  const minutes = d.getMinutes().toString().padStart(2, '0');
+  return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
 
 interface CarGridProps {
@@ -89,6 +100,12 @@ export default function CarGrid({ initialCars, initialTotal, filters }: CarGridP
                     <span className="uppercase">{car.fuel_type}</span>
                     <span className="w-1 h-1 rounded-full bg-cyan-700"></span>
                     <span>{car.mileage.toLocaleString('de-DE')} KM!</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-[10px] text-gray-500 font-mono tracking-wider mb-3">
+                    <svg className="w-3 h-3 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>LISTED: {formatListedDate(car.created_at)}</span>
                   </div>
                   <div className="mt-auto pt-2">
                     <p className="font-orbitron text-2xl md:text-3xl font-black text-[#ff8c00] tracking-widest drop-shadow-[0_0_20px_rgba(255,140,0,0.8)]">
