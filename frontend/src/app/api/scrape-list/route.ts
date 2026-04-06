@@ -46,35 +46,31 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ ok: true, message: 'Daily quota reached', addedToday });
     }
 
-    // Scan only page 1 (lightweight — fits in 10s)
-    const res = await fetch('https://www.schadeautos.nl/en/search/p/1', {
-      headers: HEADERS,
-      signal: AbortSignal.timeout(7000),
-    });
-    if (!res.ok) {
-      return NextResponse.json({ ok: false, error: `Fetch failed: ${res.status}` }, { status: 502 });
-    }
-    const html = await res.text();
-    const $ = cheerio.load(html);
-
+    // Scan pages 1-3 (fits in 10s with lightweight fetches)
     const hrefs: string[] = [];
-    $('a[href*="/damaged/passenger-cars/"]').each((_, el) => {
-      const href = $(el).attr('href');
-      if (href) {
-        const full = href.startsWith('http') ? href : `https://www.schadeautos.nl${href}`;
-        if (!hrefs.includes(full)) hrefs.push(full);
-      }
-    });
+    for (let page = 1; page <= 3; page++) {
+      const res = await fetch(`https://www.schadeautos.nl/en/search/p/${page}`, {
+        headers: HEADERS,
+        signal: AbortSignal.timeout(3000),
+      }).catch(() => null);
+      if (!res || !res.ok) continue;
+      const html = await res.text();
+      const $ = cheerio.load(html);
 
-    // Pre-filter: only queue URLs that contain a premium brand keyword in the URL slug
-    const filtered = hrefs.filter(url => {
-      const slug = url.toLowerCase();
-      return PREMIUM_BRANDS.some(b => slug.includes(b.replace(/\s+/g, '-')));
-    });
+      // Match both English and Dutch URL patterns
+      $('a[href*="/passenger-cars/"], a[href*="/personenautos/"]').each((_, el) => {
+        const href = $(el).attr('href');
+        if (href && (href.includes('/damaged/') || href.includes('/schade/'))) {
+          const full = href.startsWith('http') ? href : `https://www.schadeautos.nl${href}`;
+          if (!hrefs.includes(full)) hrefs.push(full);
+        }
+      });
+      if (hrefs.length >= 40) break;
+    }
 
-    // Queue new URLs (skip those already in cars or queue)
+    // Queue all car URLs — brand filtering happens in scrape-car when parsing the detail page
     let queued = 0;
-    for (const url of filtered) {
+    for (const url of hrefs) {
       const existsInCars = await prisma.car.findUnique({ where: { original_url: url } });
       if (existsInCars) continue;
 
@@ -89,7 +85,6 @@ export async function GET(request: NextRequest) {
       ok: true,
       timestamp: new Date().toISOString(),
       found: hrefs.length,
-      premiumFiltered: filtered.length,
       newQueued: queued,
       dailyQuota: `${addedToday}/40`,
     });
